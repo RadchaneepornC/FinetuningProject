@@ -13,6 +13,7 @@ As fine-tuning techniques become popular for enhancing various downstream applic
 ## Analysis & further study for improving 
 
 - **Clean Dataset**
+- **Chat Prompt Pemplate**
   
 - **Overall finetuning technique**
     - The loss curve is monitored from the training set using Weight and Bias (WandB)
