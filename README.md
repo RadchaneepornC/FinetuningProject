@@ -21,6 +21,175 @@ Also, this is the [source code](https://github.com/RadchaneepornC/FinetuningProj
 
 ## Fine-tuning process
 
+**0. Check GPU**
+
+```python
+
+! nvidia-smi
+
+```
+
+**1. Install require packages**
+```python
+!pip install -q -U bitsandbytes
+!pip install -q -U git+https://github.com/huggingface/transformers.git
+!pip install -q -U git+https://github.com/huggingface/peft.git
+!pip install -q -U git+https://github.com/huggingface/accelerate.git
+!pip install -q trl
+!pip install -q  wandb datasets
+!pip install huggingface-hub==0.19.4
+!pip install gradio
+```
+
+**2. Preprocessing data for finetuning**
+
+```python
+
+from datasets import load_dataset
+train_dataset = load_dataset('json', data_files='/content/drive/MyDrive/ThaiDataset/wikiThai_ft_Typhoon.jsonl', split='train')
+```
+
+**3. Load the model to GPU memory in 4-bit**
+
+```python
+
+#import requirement libary
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, HfArgumentParser, pipeline, logging
+
+# Load base model
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit= True,
+    bnb_4bit_quant_type= "nf4",
+    bnb_4bit_compute_dtype= torch.bfloat16,
+    bnb_4bit_use_double_quant= False,
+)
+
+base_model = "scb10x/typhoon-7b"
+model = AutoModelForCausalLM.from_pretrained(
+        base_model,
+        quantization_config=bnb_config,
+        torch_dtype=torch.bfloat16,
+        device_map="auto",
+        trust_remote_code=True,
+)
+model.config.use_cache = False 
+model.config.pretraining_tp = 1
+model.gradient_checkpointing_enable()
+
+# Load tokenizer
+tokenizer = AutoTokenizer.from_pretrained(base_model, trust_remote_code=True)
+tokenizer.padding_side = 'right'
+tokenizer.pad_token = tokenizer.eos_token
+tokenizer.add_eos_token = True
+tokenizer.bos_token, tokenizer.eos_token
+```
+
+**4. Define the LoRA configuration**
+
+```python
+from peft import LoraConfig, PeftModel, prepare_model_for_kbit_training, get_peft_model, AutoPeftModelForCausalLM
+
+#Adding the adapters in the layers
+model = prepare_model_for_kbit_training(model)
+
+#Setting LORA configuration
+peft_config = LoraConfig(
+    lora_alpha=16,
+    lora_dropout=0.1,
+    r=64,
+    bias="none",
+    task_type="CAUSAL_LM",
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj","gate_proj"]
+)
+model = get_peft_model(model, peft_config)
+```
+
+**5. Define training arguments**
+
+```python
+#import requirement libary
+from transformers import TrainingArguments
+
+#Hyperparamter setting
+training_arguments = TrainingArguments(
+    output_dir="/content/drive/MyDrive/FinetuneTyphoon",
+    num_train_epochs=1,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=1,
+    optim="paged_adamw_32bit",
+    save_steps=50,
+    logging_steps=1,
+    learning_rate=2e-4,
+    weight_decay=0.001,
+    fp16=False,
+    bf16=False,
+    max_grad_norm=0.3,
+    max_steps=-1,
+    warmup_ratio=0.03,
+    group_by_length=True,
+    lr_scheduler_type="constant",
+)
+
+```
+**6. Pass the arguments defined in step 4 into an instance of SFTTrainer**
+```python
+# Import require libaries
+from trl import SFTTrainer
+# Setting sft parameters
+trainer = SFTTrainer(
+    model=model,
+    train_dataset=train_dataset,
+    peft_config=peft_config,
+    max_seq_length= None,
+    dataset_text_field="Text",
+    tokenizer=tokenizer,
+    args=training_arguments,
+    packing= False,
+)
+
+#finetuning model
+trainer.train()
+```
+
+**7. Save the adapter we got from trainer**
+
+```python
+trainer.model.save_pretrained(new_model)
+model.config.use_cache = True
+model.eval()
+
+#logging in the huggingface
+from google.colab import userdata
+secret_hf = userdata.get('hf_for_write_model')
+!huggingface-cli login --token $secret_hf
+
+#push Adaptor to huggingface
+new_model = "Typhoon_wikiThai"
+trainer.model.push_to_hub(new_model)
+
+```
+
+
+
+
+
+
+**7. Inference the based model with finedtuned adaptor**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Finetuning Results 
 For this project, I randomly generate and evaluate responses using human evaluation to assess the relevance of each answer to each prompt
 | Prompt | Answer from Typhoon | Answer from finetuned Typhoon | 
@@ -84,9 +253,13 @@ As I try to experiment with improving the response quality from Thai open-source
 
 - https://medium.com/@codersama/fine-tuning-mistral-7b-in-google-colab-with-qlora-complete-guide-60e12d437cca
 - https://github.com/NielsRogge/Transformers-Tutorials/blob/master/Mistral/Supervised_fine_tuning_(SFT)_of_an_LLM_using_Hugging_Face_tooling.ipynb
+- https://www.databricks.com/blog/efficient-fine-tuning-lora-guide-llms
 
 **For inferencing model**
 - https://kaitchup.substack.com/p/lora-adapters-when-a-naive-merge?utm_source=%2Fsearch%2Fqlora&utm_medium=reader2
 
+**For based model**
+- https://huggingface.co/scb10x/typhoon-7b
+  
 **For original dataset**
 - https://huggingface.co/datasets/pythainlp/thai-wiki-dataset-v3
