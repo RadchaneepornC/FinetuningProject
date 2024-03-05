@@ -42,7 +42,8 @@ model = AutoModelForCausalLM.from_pretrained(output_dir, load_in_4bit=True, devi
 | Pre-trained Model | Team | Release time | Foundation model | Performance |
 |-------------------|------|--------------|------------------|-------------|
 | SeaLLM-7B-v2|DAMO Academy, Alibaba Group| 1 Feb 2024| Mistral-7B-v0.1|outperforms GPT-3.5 and Qwen-14B on the multilingual MGSM for Zh and Th in zero shot|
-|Sailor (0.5B, 1.8B, 4B and 7B)| Sea AI Lab |2 Mar 2024| 
+|Sailor (0.5B, 1.8B, 4B and 7B)| Sea AI Lab |2 Mar 2024| Qwen1.5| outperforms SeaLLM-7B V1 & V2 and thier based model in many evaluation tasks|
+|OpenThaiGPT-13B (version 1.0.0-beta)| AIEAT, AIAT, NECTEC, et al| 20 Dec 2023|LLaMA v2 Chat (13b)| |
 
 
 
