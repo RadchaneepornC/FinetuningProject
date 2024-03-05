@@ -195,11 +195,25 @@ prompt = build_prompt(question)
 result = pipe(prompt)
 
 print(result[0]['generated_text'])
+
+#create UI for easier using
+import gradio as gr
+def chatbot(user_input):
+    if user_input.lower() == 'exit':
+        return "Exiting."
+    return f"{pipe(user_input)[0]['generated_text']}"
+iface = gr.Interface(fn=chatbot, inputs="text", outputs= "text")
+iface.launch()
 ```
+
 
 **9. Inference the based model with finedtuned adaptor(for later use)**
 
 ```python
+!pip install -q -U git+https://github.com/huggingface/transformers.git
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import PeftModel
+
 base_model = "scb10x/typhoon-7b"
 new_model = "radchaneepornc/Typhoon_wikiThai"
 
@@ -225,15 +239,6 @@ if tokenizer.pad_token_id is None:
 
 #create pipeline for using model
 pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=200)
-
-#create UI for easier using
-import gradio as gr
-def chatbot(user_input):
-    if user_input.lower() == 'exit':
-        return "Exiting."
-    return f"{pipe(user_input)[0]['generated_text']}"
-iface = gr.Interface(fn=chatbot, inputs="text", outputs= "text")
-iface.launch()
 ```
 
 
