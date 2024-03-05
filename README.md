@@ -4,8 +4,18 @@
 As fine-tuning techniques become popular for enhancing various downstream applications, Thai Language Models (LLMs) have been developed for low-resource languages. Simultaneously, high-quality datasets have been released. I have the idea to experiment with improving LLMs for Question-Answering tasks by fine-tuning them with the dataset
 
 ## Dataset for finetuning
+For this experiment, I pass each prompt to mistral prompt template
 
 
+      <s>[INST] Instruction [/INST] Model answer</s>[INST] Follow-up instruction [/INST]
+      NOTE <s> </s> are special tokens for beginning of string (BOS) and end of string (EOS) while [INST] and [/INST] are regular strings.
+
+I select only ```title``` and ```text``` from the original dataset, then I add new ```instruction``` column including the sentence "อธิบายความหมายและให้ข้อมูลของคำดังต่อไปนี้" according to source of dataset is from the wikipedia which is the website that people usually search for definition of words
+
+below are finalised dataframe before passing to mistral chat prompt template
+![Alt text](https://github.com/RadchaneepornC/FinetuningProject/blob/main/Images/Finalise%20DataFrame.png)
+
+Also, this is the [source code](https://github.com/RadchaneepornC/FinetuningProject/blob/main/Dataset_preprocessing.ipynb) for passing data to mistral chat prompt template
 
 ## Fine-tuning process
 
@@ -24,16 +34,12 @@ For this project, I randomly generate and evaluate responses using human evaluat
 
 Since I formated the data,but did not further clean them properly, I need to clean the syntax  
 
+- **Finetuned with more examples**
+
+For this case, I finetuned with 3000 examples, Increasing size of examples for finetuning is prospect plan for my next experiment 
+
 - **Chat Prompt Template**
-For this experiment, I pass each prompt to mistral prompt template
 
-
-      <s>[INST] Instruction [/INST] Model answer</s>[INST] Follow-up instruction [/INST]
-      NOTE <s> </s> are special tokens for beginning of string (BOS) and end of string (EOS) while [INST] and [/INST] are regular strings.
-
-I select only ```title``` and ```text``` from the original dataset, then I add new ```instruction``` column including the sentence "อธิบายความหมายและให้ข้อมูลของคำดังต่อไปนี้" according to source of dataset is from the wikipedia which is the website that people usually search for definition of words
-
-below are finalised dataframe before passing to mistral chat prompt template
 
 
 
