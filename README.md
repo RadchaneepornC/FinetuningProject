@@ -22,6 +22,7 @@ Also, this is the [source code](https://github.com/RadchaneepornC/FinetuningProj
 ## Fine-tuning process
 
 See overall steps in this [document](https://github.com/RadchaneepornC/FinetuningProject/blob/main/Finetuning%20code.ipynb)
+
 **0. Check GPU**
 
 ```python
