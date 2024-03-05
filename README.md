@@ -13,7 +13,9 @@ For this experiment, I pass each prompt to mistral prompt template
 I select only ```title``` and ```text``` from the original dataset, then I add new ```instruction``` column including the sentence "อธิบายความหมายและให้ข้อมูลของคำดังต่อไปนี้" according to source of dataset is from the wikipedia which is the website that people usually search for definition of words
 
 below are finalised dataframe before passing to mistral chat prompt template
-![Alt text](https://github.com/RadchaneepornC/FinetuningProject/blob/main/Images/Finalise%20DataFrame.png)
+| Instruction | Input | Output| 
+|-------------------|------|--------------|
+|อธิบายความหมายและให้ข้อมูลของคำดังต่อไปนี้|วันจันทร์| วันจันทร์ เป็นวันลำดับที่ 2 ในสัปดาห์ อยู่ระหว่าง...|
 
 Also, this is the [source code](https://github.com/RadchaneepornC/FinetuningProject/blob/main/Dataset_preprocessing.ipynb) for passing data to mistral chat prompt template
 
@@ -40,7 +42,6 @@ For this case, I finetuned with 3000 examples, Increasing size of examples for f
 
 - **Chat Prompt Template**
 I am uncertain whether experimenting with changing the prompt template from <br>```<s>[INST] {instruction} here are the inputs {input_text} [/INST] \\n {output} </s>``` <br> to a completely Thai version like <br> ```<s>[INST] {instruction} ความหมายของ {input_text} คือ [/INST] \\n {output} </s>``` <br>will have any effect on the model's performance
-
 
 
 - **Overall finetuning technique**
@@ -73,6 +74,7 @@ model = AutoModelForCausalLM.from_pretrained(output_dir, load_in_4bit=True, devi
 
 ## Conclusions
 
+As I try to experiment with improving the response quality from Thai open-source LLMs by fine-tuning them with domain-specific datasets, and evaluate the relevance of the responses by randomly prompting the model and comparing the answers with those from the off-the-shelf Typhoon in the same prompt, we found that we could not conclusively determine whether the model's answers have significantly improved. While some prompts yielded better answers than the off-the-shelf model, there is still ample room for improvement in the model. Further steps to enhance the model include cleaning the dataset more thoroughly, adjusting the chat template prompts, increasing the number of examples for fine-tuning, adjusting hyperparameter configurations, and changing the method of loading the base model during the inference step
 
 
 
