@@ -1,5 +1,11 @@
 # Typhoon Instruction tuning with WikiThai-V03 dataset using QLORA technique
 
+<p align="center">
+  <img src="https://github.com/RadchaneepornC/FinetuningProject/blob/main/Images/picture.jpg" alt="Alt text">
+</p>
+
+[credit of picture](https://i.pinimg.com/originals/12/31/a4/1231a468460cea163fd26f2f6eda86bc.jpg)
+
 ## Motivation
 As fine-tuning techniques become popular for enhancing various downstream applications, Thai Language Models (LLMs) have been developed for low-resource languages. Simultaneously, high-quality datasets have been released. I have the idea to experiment with improving LLMs for Question-Answering tasks by fine-tuning them with the specific domain dataset
 
