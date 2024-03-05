@@ -54,7 +54,7 @@ train_dataset = load_dataset('json', data_files='/content/drive/MyDrive/ThaiData
 ```python
 
 #import requirement libary
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, HfArgumentParser, pipeline, logging
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, HfArgumentParser
 
 # Load base model
 bnb_config = BitsAndBytesConfig(
@@ -166,28 +166,64 @@ secret_hf = userdata.get('hf_for_write_model')
 #push Adaptor to huggingface
 new_model = "Typhoon_wikiThai"
 trainer.model.push_to_hub(new_model)
-
 ```
 
 
+**8. Test finetuned model**
+```python
+from transformers import pipeline, logging
+logging.set_verbosity(logging.CRITICAL)
+pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=200)
 
+def build_prompt(question):
+  prompt=f"<s>[INST]{question}[/INST]"
+  return prompt
 
+question = input()
+prompt = build_prompt(question)
+result = pipe(prompt)
 
+print(result[0]['generated_text'])
+```
 
-**7. Inference the based model with finedtuned adaptor**
+**. Inference the based model with finedtuned adaptor(for later use)**
 
+```python
+base_model = "scb10x/typhoon-7b"
+new_model = "radchaneepornc/Typhoon_wikiThai"
 
+#load model
+base_model_reload = AutoModelForCausalLM.from_pretrained(
+        base_model,
+        torch_dtype=torch.bfloat16,
+        return_dict=True,
+        low_cpu_mem_usage=True,
+        device_map="auto",
+        trust_remote_code=True,
+)
 
+#model + LoRA adaptor
+model = PeftModel.from_pretrained(base_model_reload, new_model)
 
+# Load tokenizer
+tokenizer = AutoTokenizer.from_pretrained(base_model, trust_remote_code=True)
 
+# set pad_token_id equal to the eos_token_id if not set
+if tokenizer.pad_token_id is None:
+  tokenizer.pad_token_id = tokenizer.eos_token_id
 
+#create pipeline for using model
+pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=200)
 
-
-
-
-
-
-
+#create UI for easier using
+import gradio as gr
+def chatbot(user_input):
+    if user_input.lower() == 'exit':
+        return "Exiting."
+    return f"{pipe(user_input)[0]['generated_text']}"
+iface = gr.Interface(fn=chatbot, inputs="text", outputs= "text")
+iface.launch()
+```
 
 
 ## Finetuning Results 
@@ -203,13 +239,14 @@ For this project, I randomly generate and evaluate responses using human evaluat
 
 - **Clean Dataset**
 
-Since I formated the data,but did not further clean them properly, I need to clean the syntax  
+I formatted the data but didn't clean it properly. I need to address the syntax issues
 
 - **Finetuned with more examples**
 
 For this case, I finetuned with 3000 examples, Increasing size of examples for finetuning is prospect plan for my next experiment 
 
 - **Chat Prompt Template**
+
 I am uncertain whether experimenting with changing the prompt template from <br>```<s>[INST] {instruction} here are the inputs {input_text} [/INST] \\n {output} </s>``` <br> to a completely Thai version like <br> ```<s>[INST] {instruction} ความหมายของ {input_text} คือ [/INST] \\n {output} </s>``` <br>will have any effect on the model's performance
 
 
