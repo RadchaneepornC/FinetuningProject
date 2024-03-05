@@ -21,6 +21,7 @@ Also, this is the [source code](https://github.com/RadchaneepornC/FinetuningProj
 
 ## Fine-tuning process
 
+See overall steps in this [document](https://github.com/RadchaneepornC/FinetuningProject/blob/main/Finetuning%20code.ipynb)
 **0. Check GPU**
 
 ```python
@@ -186,7 +187,7 @@ result = pipe(prompt)
 print(result[0]['generated_text'])
 ```
 
-**. Inference the based model with finedtuned adaptor(for later use)**
+**9. Inference the based model with finedtuned adaptor(for later use)**
 
 ```python
 base_model = "scb10x/typhoon-7b"
