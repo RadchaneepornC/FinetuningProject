@@ -65,6 +65,7 @@ train_dataset = load_dataset('json', data_files='/content/drive/MyDrive/ThaiData
 
 #import requirement libary
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, HfArgumentParser
+import torch
 
 # Load base model
 bnb_config = BitsAndBytesConfig(
