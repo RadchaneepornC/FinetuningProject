@@ -1,7 +1,7 @@
 # Typhoon Instruction tuning with WikiThai-V03 dataset
 
 ## Motivation
-As fine-tuning techniques become popular for enhancing various downstream applications, Thai Language Models (LLMs) have been developed for low-resource languages. Simultaneously, high-quality datasets have been released. I have the idea to experiment with improving LLMs for Question-Answering tasks by fine-tuning them with the dataset
+As fine-tuning techniques become popular for enhancing various downstream applications, Thai Language Models (LLMs) have been developed for low-resource languages. Simultaneously, high-quality datasets have been released. I have the idea to experiment with improving LLMs for Question-Answering tasks by fine-tuning them with the specific domain dataset
 
 ## Dataset for finetuning
 For this experiment, I pass each prompt to mistral prompt template
@@ -39,7 +39,7 @@ Since I formated the data,but did not further clean them properly, I need to cle
 For this case, I finetuned with 3000 examples, Increasing size of examples for finetuning is prospect plan for my next experiment 
 
 - **Chat Prompt Template**
-
+I am uncertain whether experimenting with changing the prompt template from <br>```<s>[INST] {instruction} here are the inputs {input_text} [/INST] \\n {output} </s>``` <br> to a completely Thai version like <br> ```<s>[INST] {instruction} ความหมายของ {input_text} คือ [/INST] \\n {output} </s>``` <br>will have any effect on the model's performance
 
 
 
@@ -71,10 +71,12 @@ model = AutoModelForCausalLM.from_pretrained(output_dir, load_in_4bit=True, devi
 |Sailor (0.5B, 1.8B, 4B and 7B)| Sea AI Lab |2 Mar 2024| Qwen1.5| outperforms SeaLLM-7B V1 & V2 and thier based models in many evaluation tasks|
 |OpenThaiGPT-13B (version 1.0.0-beta)| AIEAT, AIAT, NECTEC, et al| 20 Dec 2023|LLaMA v2 Chat (13b)| |
 
+## Conclusions
 
 
 
-## Resource
+
+## Resources
 
 **For Finetuning tutorial**
 
