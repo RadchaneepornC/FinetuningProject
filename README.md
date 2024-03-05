@@ -1,4 +1,4 @@
-# Typhoon Instruction tuning with WikiThai-V03 dataset
+# Typhoon Instruction tuning with WikiThai-V03 dataset using QLORA technique
 
 ## Motivation
 As fine-tuning techniques become popular for enhancing various downstream applications, Thai Language Models (LLMs) have been developed for low-resource languages. Simultaneously, high-quality datasets have been released. I have the idea to experiment with improving LLMs for Question-Answering tasks by fine-tuning them with the specific domain dataset
@@ -30,6 +30,8 @@ See overall steps in this [document](https://github.com/RadchaneepornC/Finetunin
 ! nvidia-smi
 
 ```
+**NOTE** For this time, I used V100 GPU running apploximately 4 hours, below is my usaged resources for this overall finetuning process
+![Alt text](https://github.com/RadchaneepornC/FinetuningProject/blob/main/Images/Resource_usage.png)
 
 **1. Install require packages**
 ```python
