@@ -13,6 +13,8 @@ As fine-tuning techniques become popular for enhancing various downstream applic
 ## Analysis & further study for improving 
 
 - **Clean Dataset**
+
+Since I formated the data,but did not further clean them properly, I need to clean the syntax  
 - **Chat Prompt Pemplate**
   
 - **Overall finetuning technique**
@@ -27,9 +29,22 @@ As fine-tuning techniques become popular for enhancing various downstream applic
 Then I thought that the way I load base-model without BitsAndBytesConfig setting for inferencing could be one of root causes of poor performance of my model
 <br>
 
+Use the code below to load the model based on the next time to incorporate with an adapter fine-tuned in 4-bit precision
+
+```python
+model = AutoModelForCausalLM.from_pretrained(output_dir, load_in_4bit=True, device_map="auto")
+
+```
 
 - **Try experiment finetuning using other Pretained LLMs understanding Thai, which are listed below:**
-  
+
+
+| Pre-trained Model | Team | Release time | Foundation model | Performance |
+|-------------------|------|--------------|------------------|-------------|
+| SeaLLM-7B-v2|DAMO Academy, Alibaba Group| 1 Feb 2024| Mistral-7B-v0.1|outperforms GPT-3.5 and Qwen-14B on the multilingual MGSM for Zh and Th in zero shot|
+|Sailor (0.5B, 1.8B, 4B and 7B)| Sea AI Lab |2 Mar 2024| 
+
+
 
 
 ## Resource
