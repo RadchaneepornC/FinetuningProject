@@ -242,7 +242,7 @@ pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_le
 ```
 
 
-## Finetuning Results 
+## Qualitative Model Evaluation (Human Evaluation)
 For this project, I randomly generate and evaluate responses using human evaluation to assess the relevance of each answer to each prompt
 | Prompt | Answer from Typhoon | Answer from finetuned Typhoon | 
 |-------------------|------|--------------|
