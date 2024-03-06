@@ -294,6 +294,13 @@ model = AutoModelForCausalLM.from_pretrained(output_dir, load_in_4bit=True, devi
 |Sailor (0.5B, 1.8B, 4B and 7B)| Sea AI Lab |2 Mar 2024| Qwen1.5| outperforms SeaLLM-7B V1 & V2 and thier based models in many evaluation tasks|
 |OpenThaiGPT-13B (version 1.0.0-beta)| AIEAT, AIAT, NECTEC, et al| 20 Dec 2023|LLaMA v2 Chat (13b)| |
 
+
+
+- **Split dataset into train and validate dataset to protect the overfitting problem**
+- **For the type of dataset, such as Thai Wikipedia, trying to use Retrieval Augmented Generation (RAG) may be suitable for Q&A tasks about word definitions more than fine-tuning techniques. Alternatively, both fine-tuning and RAG could be applied for exploration**
+
+
+
 ## Conclusions
 
 As I try to experiment with improving the response quality from Thai open-source LLMs by fine-tuning them with domain-specific datasets, and evaluate the relevance of the responses by randomly prompting the model and comparing the answers with those from the off-the-shelf Typhoon in the same prompt, we found that we could not conclusively determine whether the model's answers have significantly improved. While some prompts yielded better answers than the off-the-shelf model, there is still ample room for improvement in the model. Further steps to enhance the model include cleaning the dataset more thoroughly, adjusting the chat template prompts, increasing the number of examples for fine-tuning, adjusting hyperparameter configurations, and changing the method of loading the base model during the inference step
