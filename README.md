@@ -263,8 +263,21 @@ For this case, I finetuned with 3000 examples, Increasing size of examples for f
 
 - **Chat Prompt Template**
 
-I am uncertain whether experimenting with changing the prompt template from <br>```<s>[INST] {instruction} here are the inputs {input_text} [/INST] \\n {output} </s>``` <br> to a completely Thai version like <br> ```<s>[INST] {instruction} ความหมายของ {input_text} คือ [/INST] \\n {output} </s>``` <br>will have any effect on the model's performance
+I am uncertain whether experimenting with changing the prompt template from <br>```<s>[INST] {instruction} here are the inputs {input_text} [/INST] \\n {output} </s>``` <br> to original format of Mistral's finetunes by Mistral AI which is ```[INST]{instruction}[/INST]{output}``` (no space and no new line)
 
+- **Adjust code for repeatly response issue**
+
+As you can see on my result section, I got many repeatly results whether ```ดาวเคราะห์แคระ ดาวเคราะห์แคระ ดาวเคราะห์แคระ ดาวเคราะห์แคระ ดาวเคราะห์แคระ```
+or ```\nวิศวกรรมคอมพิวเตอร์ \nวิศวกรรมคอมพิวเตอร์ \nวิศวกรรมคอมพิวเตอร์ \nวิศวกรรมคอมพิวเตอร์ \n```
+
+from my research, it is come from this line of my code 
+
+```python 
+tokenizer.pad_token = tokenizer.eos_token
+```
+
+indicated that my pad token = eos token, the eos token is masked and the model never learns to output an eos token. I need to solve by using ```DataCollatorForLanguageModeling``` by default so that DataCollatorForLanguageModeling masks all pad tokens in my samples
+  
 
 - **Overall finetuning technique**
     - The loss curve is monitored from the training set using Weight and Bias (WandB)
