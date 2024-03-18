@@ -282,7 +282,7 @@ indicated that my pad token = eos token, the eos token is masked and the model n
 - **Overall finetuning technique**
     - The loss curve is monitored from the training set using Weight and Bias (WandB)
   ![Alt Text](https://github.com/RadchaneepornC/FinetuningProject/blob/main/Images/trainloss_wandb.png)
- The training graph suggests training loss unconverged since the training loss fluctuates between 0.5 and 2, this may from factors like insufficiently number of training epoch, preprocessing of the data, suboptimal hyperparameter configuration, etc.
+ The training graph suggests unconverged model since the training loss fluctuates between 0.5 and 2, this may from factors like insufficiently number of training epoch, preprocessing of the data, suboptimal hyperparameter configuration, etc.
 
 - **Inference technique**
   - Since I have found from this experimental blog about [**LoRA Adapters: When a Naive Merge Leads to Poor Performance**](https://kaitchup.substack.com/p/lora-adapters-when-a-naive-merge?utm_source=%2Fsearch%2Fqlora&utm_medium=reader2), the article show result that
