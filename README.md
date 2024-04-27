@@ -14,7 +14,8 @@ For this experiment, I pass each prompt to mistral prompt template
 
 
       <s>[INST] Instruction [/INST] Model answer</s>[INST] Follow-up instruction [/INST]
-      NOTE <s> </s> are special tokens for beginning of string (BOS) and end of string (EOS) while [INST] and [/INST] are regular strings.
+     
+  **NOTE** <s> </s> are special tokens for beginning of string (BOS) and end of string (EOS) while [INST] and [/INST] are regular strings.
 
 I select only ```title``` and ```text``` from the original dataset, then I add new ```instruction``` column including the sentence "อธิบายความหมายและให้ข้อมูลของคำดังต่อไปนี้" according to source of dataset is from the wikipedia which is the website that people usually search for definition of words
 
