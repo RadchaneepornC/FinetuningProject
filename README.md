@@ -271,13 +271,7 @@ I am uncertain whether experimenting with changing the prompt template from <br>
 As you can see on my result section, I got many repeatly results whether ```ดาวเคราะห์แคระ ดาวเคราะห์แคระ ดาวเคราะห์แคระ ดาวเคราะห์แคระ ดาวเคราะห์แคระ```
 or ```\nวิศวกรรมคอมพิวเตอร์ \nวิศวกรรมคอมพิวเตอร์ \nวิศวกรรมคอมพิวเตอร์ \nวิศวกรรมคอมพิวเตอร์ \n```
 
-from my research, it is come from this line of my code 
-
-```python 
-tokenizer.pad_token = tokenizer.eos_token
-```
-
-indicated that my pad token = eos token, the eos token is masked and the model never learns to output an eos token. I need to solve by using ```DataCollatorForLanguageModeling``` by default so that DataCollatorForLanguageModeling masks all pad tokens in my samples
+from my research, this problem can improve with inference configuration named ```repetition_penalty``` 
   
 
 - **Overall finetuning technique**
