@@ -90,7 +90,7 @@ model.gradient_checkpointing_enable()
 
 # Load tokenizer
 tokenizer = AutoTokenizer.from_pretrained(base_model, trust_remote_code=True)
-tokenizer.padding_side = 'right'
+tokenizer.padding_side = 'left'
 tokenizer.pad_token = tokenizer.eos_token
 tokenizer.add_eos_token = True
 tokenizer.bos_token, tokenizer.eos_token
